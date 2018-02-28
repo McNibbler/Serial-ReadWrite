@@ -46,7 +46,8 @@ void readReg(uint8_t deviceAddress, uint8_t regAddress) {
     unsigned int total_result = ((unsigned int) result[1] << 8) | ((unsigned int) result[0] & 0xFF);
     
     if ( regAddress == (uint8_t) 0x8E) {
-      Serial.print("Temperature reading of : ");
+      Serial.println(math_.lin11_to_float(total_result));
+      /*Serial.print("Temperature reading of : ");
       Serial.print(math_.lin11_to_float(total_result));
       Serial.print(" (lin11 to float) \t");
       Serial.print(result[1], BIN);
@@ -55,7 +56,7 @@ void readReg(uint8_t deviceAddress, uint8_t regAddress) {
       Serial.print(total_result, BIN);
       Serial.print(" (regular) ");
       Serial.print(" C from register ");
-      Serial.println( regAddress, HEX );
+      Serial.println( regAddress, HEX );*/
     }
     else {
       Serial.print( "Value of : " );
