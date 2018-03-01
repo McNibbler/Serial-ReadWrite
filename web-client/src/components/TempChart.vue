@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 text-center mb-4">
         <h1>LTC3880 Temp data over time</h1>
-        <line-chart :chartData="ChartData" :options="{responsive: true, maintainAspectRatio: false}"></line-chart>
+        <line-chart :chartData="ChartData" :options="{responsive: true, animation: false, maintainAspectRatio: false}"></line-chart>
         <p></p>
       </div>
       <div class="col-lg-12 col-md-12 col-sm-12 text-center mb-4">
@@ -26,10 +26,6 @@ export default {
   name: "Manager",
   data() {
     return {
-      apiURL: "",
-      feedback: "",
-      currentMeals: "",
-      currentAccounts: "",
       AllVotes: [],
       AllWarnings: [],
       ChartData: {},
@@ -37,20 +33,42 @@ export default {
   },
   methods: {
     async getTempData () {
-        await AuthenticationService.getTempData()
+        let data = (await AuthenticationService.getTempData()).data.data;
+
+        var chartLabels = [];
+        var tempData = [];
+        let temp = [];
+        for(let i=data.length-1; i >= 0; i--){
+            chartLabels = chartLabels.concat(data[i].time);
+            tempData = tempData.concat(data[i].temperature)
+        }
+        console.log("Data Recieved")
+
+        this.ChartData = {
+            labels: chartLabels,
+            datasets: [
+            {
+                label: 'temp',
+                backgroundColor: '#05CBE1',
+                data: tempData
+            }
+            ]
+        };     
+        
+        setTimeout(() => {this.getTempData()}, 1500);
     },
     async FakePostRequest () {
         await AuthenticationService.FakePostRequest({
-            asd: "data is Post"
+            asd: "data being posted"
             })
     },
     generateChartData: function() {
       var allLikes = [ 0, 1, 2, 4, 3 ];
       var allDislikes = [ 5, 3, 4, 5, 6 ];
-      var MealLabels = [1,2,3,4,5]
+      var chartLabels = [1,2,3,4,5]
 
       this.ChartData = {
-        labels: MealLabels,
+        labels: chartLabels,
         datasets: [
           {
             label: 'Likes',
@@ -66,7 +84,7 @@ export default {
     }    
   },
   created: function() {
-      //this.song = (await AuthenticationService.show(songId)).data
+      this.getTempData();
   },
   components: {
     defaultNav,

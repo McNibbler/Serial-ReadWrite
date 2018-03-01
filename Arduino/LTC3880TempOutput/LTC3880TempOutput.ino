@@ -24,7 +24,7 @@ void loop() {
 //  writeReg((uint8_t) 0x5A, (uint8_t) 0x50, (uint8_t) 0xB8);
 //  delay(500);
 //  readReg((uint8_t) 0x5A, (uint8_t) 0x50);
-  delay(500);
+  delay(1500);
 }
 
 /**

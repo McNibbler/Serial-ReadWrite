@@ -14,6 +14,9 @@ module.exports = function (app) {
         })
     })
     
+
+
+    //Submit Temperature data
     app.post("/TempData", function (req, res) {
         let msg = req.body;
 
@@ -33,6 +36,55 @@ module.exports = function (app) {
         res.send({response: "Message recieved -JHB"})
         //res.sendStatus(200);
     })
+
+    //Get Temperature Data
+    app.get("/TempData", function (req, res) {
+        console.log("Temperatures requested from DB...");
+
+        var meals_db = {}
+
+        db.collection('temperatureOverTime').find().sort({ $natural: -1 }).limit(50).toArray(function (err, results) {
+            if (err) return console.log(err)
+
+            console.log("Data sent from DB")
+            res.send({data: results})
+        })
+/*
+        db.collection('temperatureOverTime').find({}).toArray(function (err, results) {
+            if (err) return console.log(err)
+
+            console.log("Data sent from DB")
+            res.send({data: results})
+        })
+        */
+    });
+
+    /*
+
+    .sort()
+db.foo.find().sort({x:1});
+The 1 will sort ascending (oldest to newest) and -1 will sort descending (newest to oldest.)
+
+If you use the auto created _id field it has a date embedded in it ... so you can use that to order by ...
+
+db.foo.find().sort({_id:1});
+That will return back all your documents sorted from oldest to newest.
+
+Natural Order
+You can also use a Natural Order mentioned above ...
+
+db.foo.find().sort({$natural:1});
+Again, using 1 or -1 depending on the order you want.
+
+Use .limit()
+Lastly, it's good practice to add a limit when doing this sort of wide open query so you could do either ...
+
+db.foo.find().sort({_id:1}).limit(50);
+or
+
+db.foo.find().sort({$natural:1}).limit(50);
+
+*/
 
     //Send status dictionary
     /*
