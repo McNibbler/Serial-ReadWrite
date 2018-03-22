@@ -62,6 +62,7 @@ module.exports = function (app) {
 
     //Submit Temperature data
     app.post("/unisonData", function (req, res) {
+        console.log(msg);
         let msg = req.body;
 
         var postData = {
